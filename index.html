@@ -51,6 +51,7 @@
 
   <label>Kontinent:</label>
   <select id="kontinent">
+    <option value="">-- bitte wählen --</option>
     <option>Afrika</option>
     <option>Asien</option>
     <option>Europa</option>
@@ -71,18 +72,25 @@
 
   <label>Lage:</label>
   <select id="lage">
+    <option value="">-- bitte wählen --</option>
     <option>am Wasser (Meer/Fluss/See)</option>
     <option>von Land umgeben</option>
   </select>
 
   <label>Nachbarstadt 1:</label>
   <input type="text" id="nachbar1">
-
   <label>Nachbarstadt 2:</label>
   <input type="text" id="nachbar2">
+  <label>Nachbarstadt 3:</label>
+  <input type="text" id="nachbar3">
+  <label>Nachbarstadt 4:</label>
+  <input type="text" id="nachbar4">
+  <label>Nachbarstadt 5:</label>
+  <input type="text" id="nachbar5">
 
   <label>Klimazone:</label>
   <select id="klima">
+    <option value="">-- bitte wählen --</option>
     <option>gemäßigte Zone</option>
     <option>tropische Zone</option>
     <option>subtropische Zone</option>
@@ -100,21 +108,28 @@
 
   <label>Landschaft:</label>
   <select id="landschaft">
+    <option value="">-- bitte wählen --</option>
     <option>Wälder</option>
     <option>Ebenen</option>
     <option>Berge</option>
     <option>Küstenlandschaft</option>
     <option>Steppe</option>
+    <option>Wüste</option>
   </select>
 
   <label>Wichtige Industrie:</label>
   <select id="industrie">
+    <option value="">-- bitte wählen --</option>
     <option>Kohleabbau</option>
     <option>Maschinenbau</option>
     <option>Landwirtschaft</option>
     <option>Hafenwirtschaft</option>
     <option>IT & Technologie</option>
     <option>Tourismus</option>
+    <option>Automobilindustrie</option>
+    <option>Textilindustrie</option>
+    <option>Chemische Industrie</option>
+    <option>Finanzwesen</option>
   </select>
 
   <button onclick="generateText()">Generieren</button>
@@ -123,14 +138,19 @@
 
   <script>
     function generateText() {
-      const stadt = document.getElementById("stadt").value;
+      const stadt = document.getElementById("stadt").value.trim();
       const kontinent = document.getElementById("kontinent").value;
-      const land = document.getElementById("land").value;
+      const land = document.getElementById("land").value.trim();
       const breite = document.getElementById("breite").value;
       const laenge = document.getElementById("laenge").value;
       const lage = document.getElementById("lage").value;
-      const nachbar1 = document.getElementById("nachbar1").value;
-      const nachbar2 = document.getElementById("nachbar2").value;
+      const nachbarn = [
+        document.getElementById("nachbar1").value.trim(),
+        document.getElementById("nachbar2").value.trim(),
+        document.getElementById("nachbar3").value.trim(),
+        document.getElementById("nachbar4").value.trim(),
+        document.getElementById("nachbar5").value.trim()
+      ].filter(n => n !== "");
       const klima = document.getElementById("klima").value;
       const temperatur = document.getElementById("temperatur").value;
       const hoch = document.getElementById("hoch").value;
@@ -138,15 +158,43 @@
       const landschaft = document.getElementById("landschaft").value;
       const industrie = document.getElementById("industrie").value;
 
-      const text = `Die Stadt ${stadt} liegt auf dem Kontinent ${kontinent} im Land ${land}. 
-Sie befindet sich bei den geografischen Koordinaten ${breite}° nördlicher Breite und ${laenge}° östlicher Länge. 
-Geografisch liegt sie ${lage}. In der weiteren Umgebung befinden sich größere Städte wie ${nachbar1} und ${nachbar2}, die eine wichtige Rolle als regionale Zentren spielen. 
+      let text = `Die Stadt ${stadt || "[Name unbekannt]"} liegt`;
 
-Das Klima gehört zur ${klima}, wodurch es typische klimatische Bedingungen gibt. Die durchschnittliche Jahrestemperatur liegt bei etwa ${temperatur} °C. 
-Der höchste Punkt im Stadtgebiet oder der Umgebung erreicht ungefähr ${hoch} Meter über dem Meeresspiegel, während der tiefste Punkt bei rund ${tief} Metern liegt. 
+      if (kontinent || land) {
+        text += ` auf dem Kontinent ${kontinent || ""}`;
+        if (land) text += ` im Land ${land}`;
+        text += `.`;
+      }
 
-Die Landschaft ist geprägt von ${landschaft}, was das Erscheinungsbild der Region bestimmt. 
-Wirtschaftlich hat die Stadt eine Bedeutung durch ${industrie}, was sowohl die Geschichte als auch die Entwicklung der Stadt stark beeinflusst hat.`;
+      if (breite && laenge) {
+        text += ` Sie befindet sich bei den geografischen Koordinaten ${breite}° nördlicher Breite und ${laenge}° östlicher Länge.`;
+      }
+
+      if (lage) {
+        text += ` Geografisch liegt sie ${lage}.`;
+      }
+
+      if (nachbarn.length > 0) {
+        text += ` In der weiteren Umgebung befinden sich größere Städte wie ${nachbarn.join(", ")}.`;
+      }
+
+      if (klima || temperatur) {
+        text += ` Das Klima gehört zur ${klima || "unbekannten Klimazone"}`;
+        if (temperatur) text += `, die durchschnittliche Jahrestemperatur liegt bei etwa ${temperatur} °C`;
+        text += `.`;
+      }
+
+      if (hoch || tief) {
+        text += ` Der höchste Punkt liegt bei ${hoch || "?"} Metern, während der tiefste Punkt etwa ${tief || "?"} Meter erreicht.`;
+      }
+
+      if (landschaft) {
+        text += ` Die Landschaft ist geprägt von ${landschaft}.`;
+      }
+
+      if (industrie) {
+        text += ` Wirtschaftlich ist die Stadt besonders bekannt für ${industrie}.`;
+      }
 
       document.getElementById("output").innerText = text;
     }
