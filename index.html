@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Stadt-Lokalisierung Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 300px;
+      padding: 5px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #output {
+      margin-top: 30px;
+      padding: 15px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lokalisierung einer Stadt</h1>
+
+  <label>Stadtname:</label>
+  <input type="text" id="stadt">
+
+  <label>Kontinent:</label>
+  <select id="kontinent">
+    <option>Afrika</option>
+    <option>Asien</option>
+    <option>Europa</option>
+    <option>Nordamerika</option>
+    <option>Südamerika</option>
+    <option>Australien/Ozeanien</option>
+    <option>Antarktis</option>
+  </select>
+
+  <label>Land:</label>
+  <input type="text" id="land">
+
+  <label>Geografische Breite (°N):</label>
+  <input type="number" id="breite">
+
+  <label>Geografische Länge (°E):</label>
+  <input type="number" id="laenge">
+
+  <label>Lage:</label>
+  <select id="lage">
+    <option>am Wasser (Meer/Fluss/See)</option>
+    <option>von Land umgeben</option>
+  </select>
+
+  <label>Nachbarstadt 1:</label>
+  <input type="text" id="nachbar1">
+
+  <label>Nachbarstadt 2:</label>
+  <input type="text" id="nachbar2">
+
+  <label>Klimazone:</label>
+  <select id="klima">
+    <option>gemäßigte Zone</option>
+    <option>tropische Zone</option>
+    <option>subtropische Zone</option>
+    <option>polare Zone</option>
+  </select>
+
+  <label>Durchschnittstemperatur (°C):</label>
+  <input type="number" id="temperatur">
+
+  <label>Höchster Punkt (m):</label>
+  <input type="number" id="hoch">
+
+  <label>Tiefster Punkt (m):</label>
+  <input type="number" id="tief">
+
+  <label>Landschaft:</label>
+  <select id="landschaft">
+    <option>Wälder</option>
+    <option>Ebenen</option>
+    <option>Berge</option>
+    <option>Küstenlandschaft</option>
+    <option>Steppe</option>
+  </select>
+
+  <label>Wichtige Industrie:</label>
+  <select id="industrie">
+    <option>Kohleabbau</option>
+    <option>Maschinenbau</option>
+    <option>Landwirtschaft</option>
+    <option>Hafenwirtschaft</option>
+    <option>IT & Technologie</option>
+    <option>Tourismus</option>
+  </select>
+
+  <button onclick="generateText()">Generieren</button>
+
+  <div id="output"></div>
+
+  <script>
+    function generateText() {
+      const stadt = document.getElementById("stadt").value;
+      const kontinent = document.getElementById("kontinent").value;
+      const land = document.getElementById("land").value;
+      const breite = document.getElementById("breite").value;
+      const laenge = document.getElementById("laenge").value;
+      const lage = document.getElementById("lage").value;
+      const nachbar1 = document.getElementById("nachbar1").value;
+      const nachbar2 = document.getElementById("nachbar2").value;
+      const klima = document.getElementById("klima").value;
+      const temperatur = document.getElementById("temperatur").value;
+      const hoch = document.getElementById("hoch").value;
+      const tief = document.getElementById("tief").value;
+      const landschaft = document.getElementById("landschaft").value;
+      const industrie = document.getElementById("industrie").value;
+
+      const text = `Die Stadt ${stadt} liegt auf dem Kontinent ${kontinent} im Land ${land}. 
+Sie befindet sich bei den geografischen Koordinaten ${breite}° nördlicher Breite und ${laenge}° östlicher Länge. 
+Geografisch liegt sie ${lage}. In der weiteren Umgebung befinden sich größere Städte wie ${nachbar1} und ${nachbar2}, die eine wichtige Rolle als regionale Zentren spielen. 
+
+Das Klima gehört zur ${klima}, wodurch es typische klimatische Bedingungen gibt. Die durchschnittliche Jahrestemperatur liegt bei etwa ${temperatur} °C. 
+Der höchste Punkt im Stadtgebiet oder der Umgebung erreicht ungefähr ${hoch} Meter über dem Meeresspiegel, während der tiefste Punkt bei rund ${tief} Metern liegt. 
+
+Die Landschaft ist geprägt von ${landschaft}, was das Erscheinungsbild der Region bestimmt. 
+Wirtschaftlich hat die Stadt eine Bedeutung durch ${industrie}, was sowohl die Geschichte als auch die Entwicklung der Stadt stark beeinflusst hat.`;
+
+      document.getElementById("output").innerText = text;
+    }
+  </script>
+</body>
+</html>
