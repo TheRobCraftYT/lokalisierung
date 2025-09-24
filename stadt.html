@@ -1,225 +1,220 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Stadt-Lokalisierung Generator</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #eef2f7;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      margin: 20px 0;
-      color: #222;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .section { margin-bottom: 20px; }
-    .section h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      border-bottom: 2px solid #4CAF50;
-      padding-bottom: 4px;
-      color: #4CAF50;
-    }
-    label { display: block; margin-top: 10px; font-weight: 600; }
-    input, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-    .inline { display: flex; gap: 10px; align-items: center; }
-    .inline input { flex: 1; }
-    .inline select { width: 80px; }
-    .checkboxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 5px; margin-top: 5px; }
-    .checkboxes label { font-weight: normal; }
-    button {
-      display: block;
-      width: 100%;
-      margin-top: 20px;
-      padding: 12px;
-      background: #4CAF50;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover { background: #43a047; }
-    #output {
-      margin-top: 30px;
-      padding: 20px;
-      background: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      line-height: 1.6;
-      white-space: pre-line;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Stadt-Lokalisierung Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+body {font-family:"Segoe UI",Arial,sans-serif; margin:0; padding:0; background:#eef2f7; color:#333;}
+h1{text-align:center;margin:20px 0;color:#222;}
+.container{max-width:800px;margin:auto;background:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+.section{margin-bottom:20px;}
+.section h2{font-size:18px;margin-bottom:10px;border-bottom:2px solid #4CAF50;padding-bottom:4px;color:#4CAF50;}
+label{display:block;margin-top:10px;font-weight:600;}
+input,select{width:100%;padding:8px;margin-top:5px;border:1px solid #ccc;border-radius:6px;font-size:14px;}
+.inline{display:flex;gap:10px;align-items:center;}
+.inline input{flex:1;}
+.inline select{width:80px;}
+.checkboxes{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:5px;margin-top:5px;}
+.checkboxes label{font-weight:normal;}
+button{display:block;width:100%;margin-top:20px;padding:12px;background:#4CAF50;color:white;font-size:16px;font-weight:bold;border:none;border-radius:8px;cursor:pointer;transition:background 0.3s;}
+button:hover{background:#43a047;}
+#output{margin-top:30px;padding:20px;background:#fafafa;border:1px solid #ddd;border-radius:8px;line-height:1.6;white-space:pre-line;}
+.sourceInput{font-size:12px;margin-top:2px;}
+</style>
 </head>
 <body>
 <a href="index.html" style="margin:20px;display:block;text-decoration:none;color:#4CAF50;font-weight:bold;">⬅ Zurück zur Startseite</a>
 <h1>🗺️ Stadt-Lokalisierung Generator</h1>
 <div class="container">
-  <div class="section">
-    <h2>Allgemeine Angaben</h2>
-    <label>Stadtname:</label>
-    <input type="text" id="stadt">
-    <label>Kontinent:</label>
-    <select id="kontinent">
-      <option value="">-- bitte wählen --</option>
-      <option>Afrika</option><option>Asien</option><option>Europa</option>
-      <option>Nordamerika</option><option>Südamerika</option>
-      <option>Australien/Ozeanien</option><option>Antarktis</option>
-    </select>
-    <label>Land:</label>
-    <input type="text" id="land">
-    <label>Verwaltungseinheit (Bundesland/Provinz):</label>
-    <input type="text" id="region">
-    <label>Einwohnerzahl (ca.):</label>
-    <input type="number" id="einwohner">
-    <label>Amtssprache:</label>
-    <input type="text" id="sprache">
-    <label>Vorherrschende Religion:</label>
-    <input type="text" id="religion">
-  </div>
 
-  <div class="section">
-    <h2>Geografie</h2>
-    <label>Geografische Breite:</label>
-    <div class="inline">
-      <input type="number" id="breite">
-      <select id="breiteRichtung"><option>°N</option><option>°S</option></select>
-    </div>
-    <label>Geografische Länge:</label>
-    <div class="inline">
-      <input type="number" id="laenge">
-      <select id="laengeRichtung"><option>°E</option><option>°W</option></select>
-    </div>
-    <label>Lage:</label>
-    <select id="lage">
-      <option value="">-- bitte wählen --</option>
-      <option>am Wasser (Meer/Fluss/See)</option>
-      <option>von Land umgeben</option>
-      <option>auf einer Insel</option>
-      <option>in den Bergen</option>
-      <option>in einer Ebene</option>
-      <option>nahe einer Landesgrenze</option>
-      <option>Hauptstadt des Landes</option>
-    </select>
-    <label>Nachbarstädte:</label>
-    <input type="text" id="nachbar1" placeholder="Nachbarstadt 1">
-    <input type="text" id="nachbar2" placeholder="Nachbarstadt 2">
-    <input type="text" id="nachbar3" placeholder="Nachbarstadt 3">
-    <input type="text" id="nachbar4" placeholder="Nachbarstadt 4">
-    <input type="text" id="nachbar5" placeholder="Nachbarstadt 5">
-    <label>Wichtige Flüsse oder Seen:</label>
-    <input type="text" id="gewaesser">
-    <label>Nahegelegene Gebirge:</label>
-    <input type="text" id="gebirge">
-    <label>Höchster Punkt (m):</label>
-    <input type="number" id="hoch">
-    <label>Tiefster Punkt (m):</label>
-    <input type="number" id="tief">
-    <label>Landschaft:</label>
-    <select id="landschaft">
-      <option value="">-- bitte wählen --</option>
-      <option>Wälder</option><option>Ebenen</option><option>Berge</option>
-      <option>Küstenlandschaft</option><option>Steppe</option>
-      <option>Wüste</option><option>Seenlandschaft</option>
-      <option>Flusslandschaft</option>
-    </select>
-  </div>
+<div class="section">
+<h2>Allgemeine Angaben</h2>
+<label>Stadtname:</label>
+<input type="text" id="stadt">
+<input type="text" id="stadtQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Kontinent:</label>
+<select id="kontinent">
+<option value="">-- bitte wählen --</option>
+<option>Afrika</option><option>Asien</option><option>Europa</option>
+<option>Nordamerika</option><option>Südamerika</option>
+<option>Australien/Ozeanien</option><option>Antarktis</option>
+</select>
+<input type="text" id="kontinentQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Land:</label>
+<input type="text" id="land">
+<input type="text" id="landQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Verwaltungseinheit (Bundesland/Provinz):</label>
+<input type="text" id="region">
+<input type="text" id="regionQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Einwohnerzahl (ca.):</label>
+<input type="number" id="einwohner">
+<input type="text" id="einwohnerQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Amtssprache:</label>
+<input type="text" id="sprache">
+<input type="text" id="spracheQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Vorherrschende Religion:</label>
+<input type="text" id="religion">
+<input type="text" id="religionQuelle" class="sourceInput" placeholder="Quelle (optional)">
+</div>
 
-  <div class="section">
-    <h2>Klima</h2>
-    <label>Klimazone:</label>
-    <select id="klima">
-      <option value="">-- bitte wählen --</option>
-      <option>gemäßigte Zone</option>
-      <option>tropische Zone</option>
-      <option>subtropische Zone</option>
-      <option>polare Zone</option>
-      <option>wüstenhafte Zone</option>
-    </select>
-    <label>Durchschnittstemperatur (°C):</label>
-    <input type="number" id="temperatur">
-  </div>
+<div class="section">
+<h2>Geografie</h2>
+<label>Geografische Breite:</label>
+<div class="inline">
+<input type="number" id="breite">
+<select id="breiteRichtung"><option>°N</option><option>°S</option></select>
+</div>
+<input type="text" id="breiteQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Geografische Länge:</label>
+<div class="inline">
+<input type="number" id="laenge">
+<select id="laengeRichtung"><option>°E</option><option>°W</option></select>
+</div>
+<input type="text" id="laengeQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Lage:</label>
+<select id="lage">
+<option value="">-- bitte wählen --</option>
+<option>am Wasser (Meer/Fluss/See)</option>
+<option>von Land umgeben</option>
+<option>auf einer Insel</option>
+<option>in den Bergen</option>
+<option>in einer Ebene</option>
+<option>nahe einer Landesgrenze</option>
+<option>Hauptstadt des Landes</option>
+</select>
+<input type="text" id="lageQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Nachbarstädte:</label>
+<input type="text" id="nachbar1" placeholder="Nachbarstadt 1">
+<input type="text" id="nachbar2" placeholder="Nachbarstadt 2">
+<input type="text" id="nachbar3" placeholder="Nachbarstadt 3">
+<input type="text" id="nachbar4" placeholder="Nachbarstadt 4">
+<input type="text" id="nachbar5" placeholder="Nachbarstadt 5">
+<input type="text" id="nachbarQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Wichtige Flüsse oder Seen:</label>
+<input type="text" id="gewaesser">
+<input type="text" id="gewaesserQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Nahegelegene Gebirge:</label>
+<input type="text" id="gebirge">
+<input type="text" id="gebirgeQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Höchster Punkt (m):</label>
+<input type="number" id="hoch">
+<input type="text" id="hochQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Tiefster Punkt (m):</label>
+<input type="number" id="tief">
+<input type="text" id="tiefQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Landschaft:</label>
+<select id="landschaft">
+<option value="">-- bitte wählen --</option>
+<option>Wälder</option><option>Ebenen</option><option>Berge</option>
+<option>Küstenlandschaft</option><option>Steppe</option>
+<option>Wüste</option><option>Seenlandschaft</option>
+<option>Flusslandschaft</option>
+</select>
+<input type="text" id="landschaftQuelle" class="sourceInput" placeholder="Quelle (optional)">
+</div>
 
-  <div class="section">
-    <h2>Wirtschaft</h2>
-    <label>Wichtige Industriezweige (Mehrfachauswahl) []:</label>
-    <div class="checkboxes" id="industrien">
-      <label><input type="checkbox" value="Kohleabbau"> Kohleabbau</label>
-      <label><input type="checkbox" value="Maschinenbau"> Maschinenbau</label>
-      <label><input type="checkbox" value="Landwirtschaft"> Landwirtschaft</label>
-      <label><input type="checkbox" value="Hafenwirtschaft"> Hafenwirtschaft</label>
-      <label><input type="checkbox" value="IT & Technologie"> IT & Technologie</label>
-      <label><input type="checkbox" value="Tourismus"> Tourismus</label>
-      <label><input type="checkbox" value="Automobilindustrie"> Automobilindustrie</label>
-      <label><input type="checkbox" value="Textilindustrie"> Textilindustrie</label>
-      <label><input type="checkbox" value="Chemische Industrie"> Chemische Industrie</label>
-      <label><input type="checkbox" value="Finanzwesen"> Finanzwesen</label>
-      <label><input type="checkbox" value="Öl- und Gasförderung"> Öl- und Gasförderung</label>
-      <label><input type="checkbox" value="Stahlindustrie"> Stahlindustrie</label>
-    </div>
-  </div>
+<div class="section">
+<h2>Klima</h2>
+<label>Klimazone:</label>
+<select id="klima">
+<option value="">-- bitte wählen --</option>
+<option>gemäßigte Zone</option>
+<option>tropische Zone</option>
+<option>subtropische Zone</option>
+<option>polare Zone</option>
+<option>wüstenhafte Zone</option>
+</select>
+<input type="text" id="klimaQuelle" class="sourceInput" placeholder="Quelle (optional)">
+<label>Durchschnittstemperatur (°C):</label>
+<input type="number" id="temperatur">
+<input type="text" id="temperaturQuelle" class="sourceInput" placeholder="Quelle (optional)">
+</div>
 
-  <button onclick="generateText()">📜 Text generieren</button>
-  <button onclick="downloadPDF()">📄 Als PDF speichern</button>
+<div class="section">
+<h2>Wirtschaft</h2>
+<label>Wichtige Industriezweige (Mehrfachauswahl):</label>
+<div class="checkboxes" id="industrien">
+<label><input type="checkbox" value="Kohleabbau"> Kohleabbau</label>
+<label><input type="checkbox" value="Maschinenbau"> Maschinenbau</label>
+<label><input type="checkbox" value="Landwirtschaft"> Landwirtschaft</label>
+<label><input type="checkbox" value="Hafenwirtschaft"> Hafenwirtschaft</label>
+<label><input type="checkbox" value="IT & Technologie"> IT & Technologie</label>
+<label><input type="checkbox" value="Tourismus"> Tourismus</label>
+<label><input type="checkbox" value="Automobilindustrie"> Automobilindustrie</label>
+<label><input type="checkbox" value="Textilindustrie"> Textilindustrie</label>
+<label><input type="checkbox" value="Chemische Industrie"> Chemische Industrie</label>
+<label><input type="checkbox" value="Finanzwesen"> Finanzwesen</label>
+<label><input type="checkbox" value="Öl- und Gasförderung"> Öl- und Gasförderung</label>
+<label><input type="checkbox" value="Stahlindustrie"> Stahlindustrie</label>
+</div>
+<input type="text" id="industrieQuelle" class="sourceInput" placeholder="Quelle (optional)">
+</div>
 
-  <div id="output"></div>
+<button onclick="generateText()">📜 Text generieren</button>
+<button onclick="downloadPDF()">📄 Als PDF speichern</button>
+<div id="output"></div>
 </div>
 
 <script>
 function generateText() {
   const stadt = document.getElementById("stadt").value.trim();
+  const stadtQ = document.getElementById("stadtQuelle").value.trim();
   const kontinent = document.getElementById("kontinent").value;
+  const kontinentQ = document.getElementById("kontinentQuelle").value.trim();
   const land = document.getElementById("land").value.trim();
+  const landQ = document.getElementById("landQuelle").value.trim();
   const region = document.getElementById("region").value.trim();
+  const regionQ = document.getElementById("regionQuelle").value.trim();
   const einwohner = document.getElementById("einwohner").value;
+  const einwohnerQ = document.getElementById("einwohnerQuelle").value.trim();
   const sprache = document.getElementById("sprache").value.trim();
+  const spracheQ = document.getElementById("spracheQuelle").value.trim();
   const religion = document.getElementById("religion").value.trim();
+  const religionQ = document.getElementById("religionQuelle").value.trim();
   const breite = document.getElementById("breite").value;
   const breiteR = document.getElementById("breiteRichtung").value;
+  const breiteQ = document.getElementById("breiteQuelle").value.trim();
   const laenge = document.getElementById("laenge").value;
   const laengeR = document.getElementById("laengeRichtung").value;
+  const laengeQ = document.getElementById("laengeQuelle").value.trim();
   const lage = document.getElementById("lage").value;
-  const nachbarn = [nachbar1.value.trim(), nachbar2.value.trim(), nachbar3.value.trim(), nachbar4.value.trim(), nachbar5.value.trim()].filter(n => n!=="");
+  const lageQ = document.getElementById("lageQuelle").value.trim();
+  const nachbarn = [document.getElementById("nachbar1").value.trim(),document.getElementById("nachbar2").value.trim(),document.getElementById("nachbar3").value.trim(),document.getElementById("nachbar4").value.trim(),document.getElementById("nachbar5").value.trim()].filter(n=>n!=="");
+  const nachbarnQ = document.getElementById("nachbarQuelle").value.trim();
   const gewaesser = document.getElementById("gewaesser").value.trim();
+  const gewaesserQ = document.getElementById("gewaesserQuelle").value.trim();
   const gebirge = document.getElementById("gebirge").value.trim();
+  const gebirgeQ = document.getElementById("gebirgeQuelle").value.trim();
   const hoch = document.getElementById("hoch").value;
+  const hochQ = document.getElementById("hochQuelle").value.trim();
   const tief = document.getElementById("tief").value;
+  const tiefQ = document.getElementById("tiefQuelle").value.trim();
   const landschaft = document.getElementById("landschaft").value;
+  const landschaftQ = document.getElementById("landschaftQuelle").value.trim();
   const klima = document.getElementById("klima").value;
+  const klimaQ = document.getElementById("klimaQuelle").value.trim();
   const temperatur = document.getElementById("temperatur").value;
+  const temperaturQ = document.getElementById("temperaturQuelle").value.trim();
   const industrien = Array.from(document.querySelectorAll("#industrien input:checked")).map(cb=>cb.value);
+  const industrieQ = document.getElementById("industrieQuelle").value.trim();
 
   let text = '';
-  if(stadt) text += `Die Stadt ${stadt} liegt${land?` in ${land}`:""}${kontinent?` auf ${kontinent}`:""}. [Quelle:]\n`;
-  if(region) text += `Sie gehört zur Verwaltungseinheit ${region}. [Quelle:]\n`;
-  if(einwohner) text += `Die Einwohnerzahl beträgt etwa ${einwohner}. [Quelle:]\n`;
-  if(sprache) text += `Amtssprache ist ${sprache}. [Quelle:]\n`;
-  if(religion) text += `Vorherrschende Religion: ${religion}. [Quelle:]\n`;
-  if(breite && laenge) text += `Koordinaten: ${breite}${breiteR}, ${laenge}${laengeR}. [Quelle:]\n`;
-  if(lage) text += `Lage: ${lage}. [Quelle:]\n`;
-  if(nachbarn.length>0) text += `Nachbarstädte: ${nachbarn.join(", ")}. [Quelle:]\n`;
-  if(gewaesser) text += `Wichtige Flüsse oder Seen: ${gewaesser}. [Quelle:]\n`;
-  if(gebirge) text += `Nahegelegene Gebirge: ${gebirge}. [Quelle:]\n`;
-  if(hoch) text += `Höchster Punkt: ${hoch} m. [Quelle:]\n`;
-  if(tief) text += `Tiefster Punkt: ${tief} m. [Quelle:]\n`;
-  if(landschaft) text += `Landschaft: ${landschaft}. [Quelle:]\n`;
-  if(klima) text += `Klimazone: ${klima}${temperatur?`, Durchschnittstemperatur: ${temperatur} °C`:""}. [Quelle:]\n`;
-  if(industrien.length>0) text += `Wirtschaft: ${industrien.join(", ")}. [Quelle:]\n`;
+  if(stadt) text += `Die Stadt ${stadt}${stadtQ?` [Quelle: ${stadtQ}]`:''} liegt${land?` in ${land}${landQ?` [Quelle: ${landQ}]`:''}`:""}${kontinent?` auf ${kontinent}${kontinentQ?` [Quelle: ${kontinentQ}]`:''}`:""}.\n`;
+  if(region) text += `Sie gehört zur Verwaltungseinheit ${region}${regionQ?` [Quelle: ${regionQ}]`:''}.\n`;
+  if(einwohner) text += `Die Einwohnerzahl beträgt etwa ${einwohner}${einwohnerQ?` [Quelle: ${einwohnerQ}]`:''}.\n`;
+  if(sprache) text += `Amtssprache ist ${sprache}${spracheQ?` [Quelle: ${spracheQ}]`:''}.\n`;
+  if(religion) text += `Vorherrschende Religion: ${religion}${religionQ?` [Quelle: ${religionQ}]`:''}.\n`;
+  if(breite && laenge) text += `Koordinaten: ${breite}${breiteR}, ${laenge}${laengeR}${breiteQ||laengeQ?` [Quelle: ${breiteQ||laengeQ}]`:''}.\n`;
+  if(lage) text += `Lage: ${lage}${lageQ?` [Quelle: ${lageQ}]`:''}.\n`;
+  if(nachbarn.length>0) text += `Nachbarstädte: ${nachbarn.join(", ")}${nachbarnQ?` [Quelle: ${nachbarnQ}]`:''}.\n`;
+  if(gewaesser) text += `Wichtige Flüsse oder Seen: ${gewaesser}${gewaesserQ?` [Quelle: ${gewaesserQ}]`:''}.\n`;
+  if(gebirge) text += `Nahegelegene Gebirge: ${gebirge}${gebirgeQ?` [Quelle: ${gebirgeQ}]`:''}.\n`;
+  if(hoch) text += `Höchster Punkt: ${hoch} m${hochQ?` [Quelle: ${hochQ}]`:''}.\n`;
+  if(tief) text += `Tiefster Punkt: ${tief} m${tiefQ?` [Quelle: ${tiefQ}]`:''}.\n`;
+  if(landschaft) text += `Landschaft: ${landschaft}${landschaftQ?` [Quelle: ${landschaftQ}]`:''}.\n`;
+  if(klima) text += `Klimazone: ${klima}${klimaQ?` [Quelle: ${klimaQ}]`:''}${temperatur?`, Durchschnittstemperatur: ${temperatur} °C${temperaturQ?` [Quelle: ${temperaturQ}]`:''}`:""}.\n`;
+  if(industrien.length>0) text += `Wirtschaft: ${industrien.join(", ")}${industrieQ?` [Quelle: ${industrieQ}]`:''}.\n`;
 
   document.getElementById("output").innerText = text;
 }
