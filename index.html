@@ -18,9 +18,19 @@
       font-weight: bold;
     }
     input, select {
-      width: 300px;
       padding: 5px;
       margin-top: 5px;
+    }
+    .inline {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .inline input {
+      width: 120px;
+    }
+    .inline select {
+      width: 70px;
     }
     button {
       margin-top: 20px;
@@ -64,17 +74,34 @@
   <label>Land:</label>
   <input type="text" id="land">
 
-  <label>Geografische Breite (°N):</label>
-  <input type="number" id="breite">
+  <label>Geografische Breite:</label>
+  <div class="inline">
+    <input type="number" id="breite">
+    <select id="breiteRichtung">
+      <option>°N</option>
+      <option>°S</option>
+    </select>
+  </div>
 
-  <label>Geografische Länge (°E):</label>
-  <input type="number" id="laenge">
+  <label>Geografische Länge:</label>
+  <div class="inline">
+    <input type="number" id="laenge">
+    <select id="laengeRichtung">
+      <option>°E</option>
+      <option>°W</option>
+    </select>
+  </div>
 
-  <label>Lage:</label>
+  <label>Lage (allgemein):</label>
   <select id="lage">
     <option value="">-- bitte wählen --</option>
     <option>am Wasser (Meer/Fluss/See)</option>
     <option>von Land umgeben</option>
+    <option>auf einer Insel</option>
+    <option>in den Bergen</option>
+    <option>in einer Ebene</option>
+    <option>nahe einer Landesgrenze</option>
+    <option>Hauptstadt des Landes</option>
   </select>
 
   <label>Nachbarstadt 1:</label>
@@ -95,6 +122,7 @@
     <option>tropische Zone</option>
     <option>subtropische Zone</option>
     <option>polare Zone</option>
+    <option>wüstenhafte Zone</option>
   </select>
 
   <label>Durchschnittstemperatur (°C):</label>
@@ -115,6 +143,8 @@
     <option>Küstenlandschaft</option>
     <option>Steppe</option>
     <option>Wüste</option>
+    <option>Seenlandschaft</option>
+    <option>Flusslandschaft</option>
   </select>
 
   <label>Wichtige Industrie:</label>
@@ -130,6 +160,8 @@
     <option>Textilindustrie</option>
     <option>Chemische Industrie</option>
     <option>Finanzwesen</option>
+    <option>Öl- und Gasförderung</option>
+    <option>Stahlindustrie</option>
   </select>
 
   <button onclick="generateText()">Generieren</button>
@@ -141,8 +173,12 @@
       const stadt = document.getElementById("stadt").value.trim();
       const kontinent = document.getElementById("kontinent").value;
       const land = document.getElementById("land").value.trim();
+
       const breite = document.getElementById("breite").value;
+      const breiteR = document.getElementById("breiteRichtung").value;
       const laenge = document.getElementById("laenge").value;
+      const laengeR = document.getElementById("laengeRichtung").value;
+
       const lage = document.getElementById("lage").value;
       const nachbarn = [
         document.getElementById("nachbar1").value.trim(),
@@ -151,6 +187,7 @@
         document.getElementById("nachbar4").value.trim(),
         document.getElementById("nachbar5").value.trim()
       ].filter(n => n !== "");
+
       const klima = document.getElementById("klima").value;
       const temperatur = document.getElementById("temperatur").value;
       const hoch = document.getElementById("hoch").value;
@@ -167,7 +204,7 @@
       }
 
       if (breite && laenge) {
-        text += ` Sie befindet sich bei den geografischen Koordinaten ${breite}° nördlicher Breite und ${laenge}° östlicher Länge.`;
+        text += ` Sie befindet sich bei den geografischen Koordinaten ${breite}${breiteR} und ${laenge}${laengeR}.`;
       }
 
       if (lage) {
