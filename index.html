@@ -5,174 +5,235 @@
   <title>Stadt-Lokalisierung Generator</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f5f5f5;
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #eef2f7;
+      color: #333;
     }
     h1 {
-      color: #333;
+      text-align: center;
+      margin: 20px 0;
+      color: #222;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .section h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 4px;
+      color: #4CAF50;
     }
     label {
       display: block;
       margin-top: 10px;
-      font-weight: bold;
+      font-weight: 600;
     }
     input, select {
-      padding: 5px;
+      width: 100%;
+      padding: 8px;
       margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
     }
     .inline {
       display: flex;
-      gap: 5px;
+      gap: 10px;
       align-items: center;
     }
     .inline input {
-      width: 120px;
+      flex: 1;
     }
     .inline select {
-      width: 70px;
+      width: 80px;
+    }
+    .checkboxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 5px;
+      margin-top: 5px;
+    }
+    .checkboxes label {
+      font-weight: normal;
     }
     button {
+      display: block;
+      width: 100%;
       margin-top: 20px;
-      padding: 10px 20px;
+      padding: 12px;
       background: #4CAF50;
       color: white;
+      font-size: 16px;
+      font-weight: bold;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s;
     }
     button:hover {
-      background: #45a049;
+      background: #43a047;
     }
     #output {
       margin-top: 30px;
-      padding: 15px;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 20px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      line-height: 1.6;
       white-space: pre-line;
     }
   </style>
 </head>
 <body>
-  <h1>Lokalisierung einer Stadt</h1>
+  <h1>🗺️ Stadt-Lokalisierung Generator</h1>
+  <div class="container">
+    
+    <div class="section">
+      <h2>Allgemeine Angaben</h2>
+      <label>Stadtname:</label>
+      <input type="text" id="stadt">
 
-  <label>Stadtname:</label>
-  <input type="text" id="stadt">
+      <label>Kontinent:</label>
+      <select id="kontinent">
+        <option value="">-- bitte wählen --</option>
+        <option>Afrika</option><option>Asien</option><option>Europa</option>
+        <option>Nordamerika</option><option>Südamerika</option>
+        <option>Australien/Ozeanien</option><option>Antarktis</option>
+      </select>
 
-  <label>Kontinent:</label>
-  <select id="kontinent">
-    <option value="">-- bitte wählen --</option>
-    <option>Afrika</option>
-    <option>Asien</option>
-    <option>Europa</option>
-    <option>Nordamerika</option>
-    <option>Südamerika</option>
-    <option>Australien/Ozeanien</option>
-    <option>Antarktis</option>
-  </select>
+      <label>Land:</label>
+      <input type="text" id="land">
 
-  <label>Land:</label>
-  <input type="text" id="land">
+      <label>Verwaltungseinheit (Bundesland/Provinz):</label>
+      <input type="text" id="region">
 
-  <label>Geografische Breite:</label>
-  <div class="inline">
-    <input type="number" id="breite">
-    <select id="breiteRichtung">
-      <option>°N</option>
-      <option>°S</option>
-    </select>
+      <label>Einwohnerzahl (ca.):</label>
+      <input type="number" id="einwohner">
+
+      <label>Amtssprache:</label>
+      <input type="text" id="sprache">
+
+      <label>Vorherrschende Religion:</label>
+      <input type="text" id="religion">
+    </div>
+
+    <div class="section">
+      <h2>Geografie</h2>
+      <label>Geografische Breite:</label>
+      <div class="inline">
+        <input type="number" id="breite">
+        <select id="breiteRichtung">
+          <option>°N</option><option>°S</option>
+        </select>
+      </div>
+
+      <label>Geografische Länge:</label>
+      <div class="inline">
+        <input type="number" id="laenge">
+        <select id="laengeRichtung">
+          <option>°E</option><option>°W</option>
+        </select>
+      </div>
+
+      <label>Lage:</label>
+      <select id="lage">
+        <option value="">-- bitte wählen --</option>
+        <option>am Wasser (Meer/Fluss/See)</option>
+        <option>von Land umgeben</option>
+        <option>auf einer Insel</option>
+        <option>in den Bergen</option>
+        <option>in einer Ebene</option>
+        <option>nahe einer Landesgrenze</option>
+        <option>Hauptstadt des Landes</option>
+      </select>
+
+      <label>Nachbarstädte:</label>
+      <input type="text" id="nachbar1" placeholder="Nachbarstadt 1">
+      <input type="text" id="nachbar2" placeholder="Nachbarstadt 2">
+      <input type="text" id="nachbar3" placeholder="Nachbarstadt 3">
+
+      <label>Wichtige Flüsse oder Seen:</label>
+      <input type="text" id="gewaesser">
+
+      <label>Nahegelegene Gebirge:</label>
+      <input type="text" id="gebirge">
+
+      <label>Höchster Punkt (m):</label>
+      <input type="number" id="hoch">
+
+      <label>Tiefster Punkt (m):</label>
+      <input type="number" id="tief">
+
+      <label>Landschaft:</label>
+      <select id="landschaft">
+        <option value="">-- bitte wählen --</option>
+        <option>Wälder</option><option>Ebenen</option><option>Berge</option>
+        <option>Küstenlandschaft</option><option>Steppe</option>
+        <option>Wüste</option><option>Seenlandschaft</option>
+        <option>Flusslandschaft</option>
+      </select>
+    </div>
+
+    <div class="section">
+      <h2>Klima</h2>
+      <label>Klimazone:</label>
+      <select id="klima">
+        <option value="">-- bitte wählen --</option>
+        <option>gemäßigte Zone</option>
+        <option>tropische Zone</option>
+        <option>subtropische Zone</option>
+        <option>polare Zone</option>
+        <option>wüstenhafte Zone</option>
+      </select>
+
+      <label>Durchschnittstemperatur (°C):</label>
+      <input type="number" id="temperatur">
+    </div>
+
+    <div class="section">
+      <h2>Wirtschaft</h2>
+      <label>Wichtige Industriezweige:</label>
+      <div class="checkboxes" id="industrien">
+        <label><input type="checkbox" value="Kohleabbau"> Kohleabbau</label>
+        <label><input type="checkbox" value="Maschinenbau"> Maschinenbau</label>
+        <label><input type="checkbox" value="Landwirtschaft"> Landwirtschaft</label>
+        <label><input type="checkbox" value="Hafenwirtschaft"> Hafenwirtschaft</label>
+        <label><input type="checkbox" value="IT & Technologie"> IT & Technologie</label>
+        <label><input type="checkbox" value="Tourismus"> Tourismus</label>
+        <label><input type="checkbox" value="Automobilindustrie"> Automobilindustrie</label>
+        <label><input type="checkbox" value="Textilindustrie"> Textilindustrie</label>
+        <label><input type="checkbox" value="Chemische Industrie"> Chemische Industrie</label>
+        <label><input type="checkbox" value="Finanzwesen"> Finanzwesen</label>
+        <label><input type="checkbox" value="Öl- und Gasförderung"> Öl- und Gasförderung</label>
+        <label><input type="checkbox" value="Stahlindustrie"> Stahlindustrie</label>
+      </div>
+    </div>
+
+    <button onclick="generateText()">📜 Text generieren</button>
+
+    <div id="output"></div>
   </div>
-
-  <label>Geografische Länge:</label>
-  <div class="inline">
-    <input type="number" id="laenge">
-    <select id="laengeRichtung">
-      <option>°E</option>
-      <option>°W</option>
-    </select>
-  </div>
-
-  <label>Lage (allgemein):</label>
-  <select id="lage">
-    <option value="">-- bitte wählen --</option>
-    <option>am Wasser (Meer/Fluss/See)</option>
-    <option>von Land umgeben</option>
-    <option>auf einer Insel</option>
-    <option>in den Bergen</option>
-    <option>in einer Ebene</option>
-    <option>nahe einer Landesgrenze</option>
-    <option>Hauptstadt des Landes</option>
-  </select>
-
-  <label>Nachbarstadt 1:</label>
-  <input type="text" id="nachbar1">
-  <label>Nachbarstadt 2:</label>
-  <input type="text" id="nachbar2">
-  <label>Nachbarstadt 3:</label>
-  <input type="text" id="nachbar3">
-  <label>Nachbarstadt 4:</label>
-  <input type="text" id="nachbar4">
-  <label>Nachbarstadt 5:</label>
-  <input type="text" id="nachbar5">
-
-  <label>Klimazone:</label>
-  <select id="klima">
-    <option value="">-- bitte wählen --</option>
-    <option>gemäßigte Zone</option>
-    <option>tropische Zone</option>
-    <option>subtropische Zone</option>
-    <option>polare Zone</option>
-    <option>wüstenhafte Zone</option>
-  </select>
-
-  <label>Durchschnittstemperatur (°C):</label>
-  <input type="number" id="temperatur">
-
-  <label>Höchster Punkt (m):</label>
-  <input type="number" id="hoch">
-
-  <label>Tiefster Punkt (m):</label>
-  <input type="number" id="tief">
-
-  <label>Landschaft:</label>
-  <select id="landschaft">
-    <option value="">-- bitte wählen --</option>
-    <option>Wälder</option>
-    <option>Ebenen</option>
-    <option>Berge</option>
-    <option>Küstenlandschaft</option>
-    <option>Steppe</option>
-    <option>Wüste</option>
-    <option>Seenlandschaft</option>
-    <option>Flusslandschaft</option>
-  </select>
-
-  <label>Wichtige Industrie:</label>
-  <select id="industrie">
-    <option value="">-- bitte wählen --</option>
-    <option>Kohleabbau</option>
-    <option>Maschinenbau</option>
-    <option>Landwirtschaft</option>
-    <option>Hafenwirtschaft</option>
-    <option>IT & Technologie</option>
-    <option>Tourismus</option>
-    <option>Automobilindustrie</option>
-    <option>Textilindustrie</option>
-    <option>Chemische Industrie</option>
-    <option>Finanzwesen</option>
-    <option>Öl- und Gasförderung</option>
-    <option>Stahlindustrie</option>
-  </select>
-
-  <button onclick="generateText()">Generieren</button>
-
-  <div id="output"></div>
 
   <script>
     function generateText() {
       const stadt = document.getElementById("stadt").value.trim();
       const kontinent = document.getElementById("kontinent").value;
       const land = document.getElementById("land").value.trim();
+      const region = document.getElementById("region").value.trim();
+      const einwohner = document.getElementById("einwohner").value;
+      const sprache = document.getElementById("sprache").value.trim();
+      const religion = document.getElementById("religion").value.trim();
 
       const breite = document.getElementById("breite").value;
       const breiteR = document.getElementById("breiteRichtung").value;
@@ -183,28 +244,43 @@
       const nachbarn = [
         document.getElementById("nachbar1").value.trim(),
         document.getElementById("nachbar2").value.trim(),
-        document.getElementById("nachbar3").value.trim(),
-        document.getElementById("nachbar4").value.trim(),
-        document.getElementById("nachbar5").value.trim()
+        document.getElementById("nachbar3").value.trim()
       ].filter(n => n !== "");
 
-      const klima = document.getElementById("klima").value;
-      const temperatur = document.getElementById("temperatur").value;
+      const gewaesser = document.getElementById("gewaesser").value.trim();
+      const gebirge = document.getElementById("gebirge").value.trim();
       const hoch = document.getElementById("hoch").value;
       const tief = document.getElementById("tief").value;
       const landschaft = document.getElementById("landschaft").value;
-      const industrie = document.getElementById("industrie").value;
 
-      let text = `Die Stadt ${stadt || "[Name unbekannt]"} liegt`;
+      const klima = document.getElementById("klima").value;
+      const temperatur = document.getElementById("temperatur").value;
+
+      const industrien = Array.from(document.querySelectorAll("#industrien input:checked")).map(cb => cb.value);
+
+      let text = `Die Stadt ${stadt || "[unbekannt]"} liegt`;
 
       if (kontinent || land) {
         text += ` auf dem Kontinent ${kontinent || ""}`;
         if (land) text += ` im Land ${land}`;
+        if (region) text += ` in der Region ${region}`;
         text += `.`;
       }
 
+      if (einwohner) {
+        text += ` Sie zählt ungefähr ${einwohner} Einwohner.`;
+      }
+
+      if (sprache) {
+        text += ` Die Amtssprache ist ${sprache}.`;
+      }
+
+      if (religion) {
+        text += ` Vorherrschend ist die Religion ${religion}.`;
+      }
+
       if (breite && laenge) {
-        text += ` Sie befindet sich bei den geografischen Koordinaten ${breite}${breiteR} und ${laenge}${laengeR}.`;
+        text += ` Die Stadt befindet sich bei den geografischen Koordinaten ${breite}${breiteR} und ${laenge}${laengeR}.`;
       }
 
       if (lage) {
@@ -212,25 +288,33 @@
       }
 
       if (nachbarn.length > 0) {
-        text += ` In der weiteren Umgebung befinden sich größere Städte wie ${nachbarn.join(", ")}.`;
+        text += ` In der Umgebung liegen größere Städte wie ${nachbarn.join(", ")}.`;
       }
 
-      if (klima || temperatur) {
-        text += ` Das Klima gehört zur ${klima || "unbekannten Klimazone"}`;
-        if (temperatur) text += `, die durchschnittliche Jahrestemperatur liegt bei etwa ${temperatur} °C`;
-        text += `.`;
+      if (gewaesser) {
+        text += ` Bedeutende Gewässer in der Nähe sind ${gewaesser}.`;
+      }
+
+      if (gebirge) {
+        text += ` In der Nähe erhebt sich das Gebirge ${gebirge}.`;
       }
 
       if (hoch || tief) {
-        text += ` Der höchste Punkt liegt bei ${hoch || "?"} Metern, während der tiefste Punkt etwa ${tief || "?"} Meter erreicht.`;
+        text += ` Der höchste Punkt erreicht ${hoch || "?"} Meter, der tiefste Punkt liegt bei etwa ${tief || "?"} Metern.`;
       }
 
       if (landschaft) {
-        text += ` Die Landschaft ist geprägt von ${landschaft}.`;
+        text += ` Die Landschaft ist vor allem geprägt durch ${landschaft}.`;
       }
 
-      if (industrie) {
-        text += ` Wirtschaftlich ist die Stadt besonders bekannt für ${industrie}.`;
+      if (klima || temperatur) {
+        text += ` Das Klima zählt zur ${klima || "unbekannten Klimazone"}`;
+        if (temperatur) text += `, mit einer durchschnittlichen Jahrestemperatur von etwa ${temperatur} °C`;
+        text += `.`;
+      }
+
+      if (industrien.length > 0) {
+        text += ` Wirtschaftlich ist die Stadt besonders bekannt für ${industrien.join(", ")}.`;
       }
 
       document.getElementById("output").innerText = text;
